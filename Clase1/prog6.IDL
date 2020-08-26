@@ -1,0 +1,33 @@
+pro prog6
+    ;Lectura de la imagen
+    ans4a ='C:\Users\1046986683\Documents\Imagenes\Clase1\Fig1.07(b).jpg'
+
+    READ_JPEG,ans4a,image
+    tamanio=Size(image) & nx=tamanio(1)  & ny=tamanio(2)
+    print,nx,ny,'tamanio de la imagen'
+
+    Window,0,Xpos=0,Ypos=0,Xsize=nx,Ysize=ny,Title='Imagen Original'
+    Tvscl,image
+    lx=10
+
+    imagen2=Marco(image,lx);Se coloca un marco alrededor de la imagen original
+
+    Window,1,Xpos=nx,Ypos=0,Xsize=nx+2*lx,Ysize=ny+2*lx,Title='Imagen ampliada'
+    Tvscl,imagen2
+
+End
+;===========================================================================================================================================================
+function Marco,imagen,lx
+tamanio=Size(imagen) & nx2=tamanio(1)  & ny2=tamanio(2)
+print,nx2,ny2,'tamanio de la imagen---2'
+imagen2=Bytarr(nx2+2*lx,ny2+2*lx)
+imagen2(lx-1:nx2+lx-2,lx-1:ny2+lx-2)=imagen(0:nx2-1,0:ny2-1)
+tamanio=Size(imagen2) & nx3=tamanio(1)  & ny3=tamanio(2)
+print,nx3,ny3,'tamanio de la imagen---2'
+Return,imagen2
+End
+
+
+
+
+

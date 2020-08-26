@@ -1,0 +1,62 @@
+pro prog5Celegans
+ini=101 & fin=470
+x0=intarr(fin-ini+1) & y0=intarr(fin-ini+1)
+y=intarr(720) & x=indgen(720)
+angulo=fltarr(fin-ini+1)
+velx=fltarr(fin-ini) & vely=fltarr(fin-ini) & rapidez=fltarr(fin-ini)
+imag4=bytarr(720,576)
+
+; Inicio del ciclo principal (para cada imagen):
+For k=ini,fin Do Begin
+;wait,1
+archivo='C:\Users\1046986683\Documents\CdeImagenes\Clase1\CElegans\journal.pone.0016637.s002\Frame'+STRTRIM(STRING(k,'.jpeg'),2)
+    print,archivo,'archivo'
+    READ_JPEG,archivo,imag
+    tamano=size(imag)
+    ;print,tamano,'tamano'
+    nx=tamano(2) & ny=tamano(3)
+    imag2=bytarr(nx,ny)
+    imag2(*,*)=imag(0,*,*)
+    imag3=imag2 gt 100
+we=where(imag3 eq 1,np)
+x=intarr(np) & y=intarr(np)
+x=we mod nx & y = we/nx
+xp=moment(x) & yp=moment(y)
+x0(k-ini)=xp(0) & y0(k-ini)=yp(0)
+imag3(xp(0)-5:xp(0)+5,yp(0)-5:yp(0)+5)=5
+imag4(xp(0)-3:xp(0)+3,yp(0)-3:yp(0)+3)=5
+
+;Orientacion y =A +BX
+result = LINFIT(x, y)
+A = result(0) & B = result(1)
+angulo(k-ini)=ATAN(result(1))*(180.0/!PI)
+WINDOW, 17,Xpos=nx+1,Ypos=0, XSIZE=nx, YSIZE=ny, TITLE='Orientacion'
+plot,angulo;,PSYM=4
+x1=FINDGEN(nx) & y1= FINDGEN(nx)
+y1(*)=FIX(A+B*x1(*))
+For j=0,nx-1 Do Begin
+  For k2=0,ny-1 Do Begin
+     If(k2 eq y1(j)) Then Begin
+               imag3(j,k2)=5
+              EndIf
+  Endfor
+Endfor
+WINDOW, 10,Xpos=0,Ypos=0, XSIZE=nx, YSIZE=ny, TITLE='Final'
+Tvscl,imag3+imag4
+  EndFor
+
+For m=0,fin-ini-1 Do Begin
+ velx(m)=(x0(m+1)-x0(m)) & vely(m)=(y0(m+1)-y0(m))
+ rapidez(m)=SQRT((velx(m))^2+(vely(m))^2)
+EndFor
+
+WINDOW, 11, XSIZE=nx, YSIZE=ny, TITLE='Final vel x'
+plot,velx
+WINDOW, 12, XSIZE=nx, YSIZE=ny, TITLE='Final vel y'
+plot,vely
+WINDOW, 13, XSIZE=nx, YSIZE=ny, TITLE='Rapidez'
+plot,rapidez
+WINDOW, 14, XSIZE=nx, YSIZE=ny, TITLE='Trayectoria'
+plot,x0,y0
+
+End

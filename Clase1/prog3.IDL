@@ -1,0 +1,28 @@
+pro prog3
+
+   ans4a ='C:\Users\1046986683\Documents\Ciencia de Imagenes\Imagenes\Clase1\Fig1.07(b).jpg'
+
+    READ_JPEG,ans4a,image
+    tamanio=Size(image)
+    print,tamanio,'tamanio de la imagen'
+    nx=tamanio(1)  & ny=tamanio(2)
+
+    Window,0,Xpos=100,Ypos=100,Xsize=nx,Ysize=ny,Title='Imagen Original'
+    Tvscl,image
+
+   r=bytarr(nx,ny) &  g=bytarr(nx,ny) &  b=bytarr(nx,ny)
+   a=bytarr(3,nx,ny)
+   r=image & g=image & b=image
+
+  pix10=Where(image gt 200,maxn)
+  print,maxn  ; Numero de pixeles que cumplen la condicion
+  r(pix10)=100
+  g(pix10)=255
+  b(pix10)=200
+
+ a(0,*,*)=r(*,*) & a(1,*,*)=g(*,*) & a(2,*,*)=b(*,*)
+
+Window,15,Xsize=nx,Ysize=ny,Title='A color'
+Tvscl,a,True=1
+
+End

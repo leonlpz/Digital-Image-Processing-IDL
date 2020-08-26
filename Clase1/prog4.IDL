@@ -1,0 +1,28 @@
+; ==================================================================
+pro prog4
+
+;Inicio del programa
+;Imagen binaria
+
+    ;Lectura de la imagen
+    ans4a ='C:\Users\1046986683\Documents\Ciencia de Imagenes\Imagenes\Clase1\Fig1.07(b).jpg'
+
+    READ_JPEG,ans4a,image
+    tamanio=Size(image)
+    print,tamanio,'tamanio de la imagen'
+    nx=tamanio(1)  & ny=tamanio(2)
+
+    Window,0,Xpos=0,Ypos=0,Xsize=nx,Ysize=ny,Title='Imagen Original'
+    Tvscl,image
+
+    imagen2=image gt 170
+
+    Window,1,Xpos=nx,Ypos=0,Xsize=nx,Ysize=ny,Title='Imagen Binaria'
+    Tvscl,imagen2
+
+
+End
+
+
+
+

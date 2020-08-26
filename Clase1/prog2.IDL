@@ -1,0 +1,43 @@
+pro prog2
+    ans4a ='C:\Users\1046986683\Documents\Imagenes\Clase1\Fig1.07(b).jpg'
+    READ_JPEG,ans4a,image
+    tamanio=Size(image) & nx=tamanio(1)  & ny=tamanio(2)
+    Window,0,Xpos=0,Ypos=100,Xsize=nx,Ysize=ny,Title='Imagen Original'
+    Tvscl,image
+ nmar=3 & marcasx=fltarr(nmar) & marcasy=fltarr(nmar)
+ For i=0,nmar-1 Do Begin
+   cursor,a,b,/device
+   wait,1
+   marcasx(i)=a & marcasy(i)=b
+ EndFor
+
+xmax=max(marcasx) & xmin=min(marcasx) & ymax=max(marcasy) & ymin=min(marcasy)
+lx2=xmax-xmin+1 & ly2=ymax-ymin+1
+imag1=bytarr(lx2,ly2)
+imag1(0:lx2-1,0:ly2-1)=image(xmin:xmax,ymin:ymax)
+
+Window,3,XSIZE=lx2, YSIZE=ly2, TITLE='Imagen cortada'
+Tvscl,imag1
+
+Suma=0.0 ;Nivel de gris promedio
+Contador=0.0
+For j = 0,lx2-1 Do Begin
+  For k = 0,ly2-1 Do Begin
+     Suma=Suma + imag1(j,k) & Contador=Contador+1
+  EndFor
+EndFor
+Promedio=Suma/Contador
+Print,Promedio,total(imag1)/float(lx2*ly2),'Nivel de gris promedio'
+Maximo=Max(image)
+print,Maximo,'maximo'
+If (Promedio lt (Maximo/2.0)) Then Begin
+        Marco2=255
+EndIf
+If (Promedio gt (Maximo/2.0)) Then Begin
+        Marco2=0
+EndIf
+image(xmin:xmax,ymin)=Marco2 & image(xmin:xmax,ymax)=Marco2 & image(xmin,ymin:ymax)=Marco2
+image(xmax,ymin:ymax)=Marco2
+Window,1,Xpos=0,Ypos=0,Xsize=nx,Ysize=ny,Title='Imagen con contraste'
+Tvscl,image
+End
