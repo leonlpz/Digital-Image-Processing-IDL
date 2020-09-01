@@ -1,0 +1,33 @@
+pro programa1
+    nombre ='C:\Users\1046986683\Documents\Ciencia de Imagenes\Imagenes\Clase2\Fig2.21(a).jpg'
+
+    READ_JPEG,nombre,imag
+    tamano=Size(imag) &  nx=tamano(1)  & ny=tamano(2)
+
+    Window,1,Xpos=0,Ypos=0,Xsize=nx,Ysize=ny,Title='Imagen Original'
+    Tv,imag
+
+imag2=bytarr(nx/2,ny/2)
+
+For j = 0,nx/2-1 Do Begin
+ For k = 0,ny/2-1 Do Begin
+     imag2(j,k)=imag(2*j,2*k)
+
+ EndFor
+EndFor
+
+Window,1,Xpos=1,Ypos=1,Xsize=nx/2,Ysize=ny/2,Title='1/2 zoom out'
+Tv,imag2
+tamano=size(imag2) & nx=tamano(1) & ny=tamano(2)
+print,nx,ny,'nx-ny'
+imag21=bytarr(nx,2*ny)
+for k=0,ny-1 Do Begin
+ imag21(*,2*k)=imag2(*,k) & imag21(*,2*k+1)=imag2(*,k)
+ EndFor
+ imag22=bytarr(2*nx,2*ny)
+ For j=0,nx-1 Do Begin
+ imag22(2*j,*)=imag21(j,*) & imag22(2*j+1,*)=imag21(j,*)
+ EndFor
+Window, 11,Xpos=1,Ypos = 1,Xsize=2*nx, Ysize=2*ny, Title='(1/2)*2'
+tv,imag22
+End
